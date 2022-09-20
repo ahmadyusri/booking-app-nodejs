@@ -3,10 +3,21 @@ import { BaseMailer, MessageContract } from '@ioc:Adonis/Addons/Mail'
 import User from 'App/Models/User'
 import { appName } from 'Config/app'
 
+export interface AdditionalDataProps {
+  event: {
+    id: string
+    provider: string
+  }
+  feature: string
+  data_id: string | number
+  verification_pageurl: string
+  locale?: string
+}
+
 export default class NewUserMailer extends BaseMailer {
   protected i18n: I18nContract
 
-  constructor(private user: User, private additionalData: any) {
+  constructor(private user: User, private additionalData: AdditionalDataProps) {
     super()
 
     this.i18n = I18n.locale(additionalData.locale ?? I18n.defaultLocale)
@@ -33,12 +44,13 @@ export default class NewUserMailer extends BaseMailer {
       .subject(this.i18n.formatMessage('auth.email.welcome_subject'))
       .from('info@booking-app.com', appName)
       .to(this.user.email)
-      .messageId(this.additionalData.event_id)
+      .messageId(this.additionalData.event.id)
       .htmlView('emails/welcome', {
+        event: this.additionalData.event,
         feature: this.additionalData.feature,
         data_id: this.additionalData.data_id,
-        user: this.user,
         url: this.additionalData.verification_pageurl,
+        user: this.user,
       })
   }
 }

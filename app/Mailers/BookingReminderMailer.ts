@@ -3,10 +3,22 @@ import I18n, { I18nContract } from '@ioc:Adonis/Addons/I18n'
 import Booking from 'App/Models/Service/Booking'
 import { appName } from 'Config/app'
 
+export interface AdditionalDataProps {
+  event: {
+    id: string
+    provider: string
+  }
+  feature: string
+  data_id: string | number
+  booking_pageurl: string
+  formatted_booking_time: string
+  locale?: string
+}
+
 export default class BookingReminderMailer extends BaseMailer {
   protected i18n: I18nContract
 
-  constructor(private booking: Booking, private additionalData: any) {
+  constructor(private booking: Booking, private additionalData: AdditionalDataProps) {
     super()
 
     this.i18n = I18n.locale(additionalData.locale ?? I18n.defaultLocale)
@@ -33,13 +45,14 @@ export default class BookingReminderMailer extends BaseMailer {
       .subject(this.i18n.formatMessage('booking.email.reminder.mail_subject'))
       .from('info@booking-app.com', appName)
       .to(this.booking.user.email)
-      .messageId(this.additionalData.event_id)
+      .messageId(this.additionalData.event.id)
       .htmlView('emails/booking/reminder', {
+        event: this.additionalData.event,
         feature: this.additionalData.feature,
         data_id: this.additionalData.data_id,
-        booking: this.booking,
         formatted_booking_time: this.additionalData.formatted_booking_time,
         url: this.additionalData.booking_pageurl,
+        booking: this.booking,
       })
   }
 }

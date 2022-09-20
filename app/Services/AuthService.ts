@@ -6,6 +6,7 @@ import NewUserJob from 'App/Jobs/NewUserJob'
 import Hash from '@ioc:Adonis/Core/Hash'
 import { AuthContract } from '@ioc:Adonis/Addons/Auth'
 import { DateTime } from 'luxon'
+import { v4 as uuid } from 'uuid'
 
 export interface AddUserProps {
   name: string
@@ -84,8 +85,16 @@ export interface EmitEventNewUserProps {
 }
 
 export const emitEventNewUser = ({ user, locale }: EmitEventNewUserProps): void => {
-  // Run Job
-  Bull.add(new NewUserJob().key, { user, locale })
+  /*
+   * Run Job
+   * attempt 2 times on failed, every 1 minutes
+   */
+  const jobId = uuid()
+  Bull.add(
+    new NewUserJob().key,
+    { user, locale },
+    { jobId, attempts: 2, backoff: { type: 'fixed', delay: 60000 } }
+  )
 }
 
 export interface LoginUserProps {

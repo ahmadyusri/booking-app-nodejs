@@ -9,6 +9,8 @@ import BookingPurchasedJob from 'App/Jobs/BookingPurchasedJob'
 import BookingReminderJob from 'App/Jobs/BookingReminderJob'
 import Logger from '@ioc:Adonis/Core/Logger'
 import { DateTime, Duration } from 'luxon'
+import EventStatus from 'App/Models/EventStatus'
+import { v4 as uuid } from 'uuid'
 
 export default class BookingController {
   index = async ({ auth, request, response }: HttpContextContract) => {
@@ -164,11 +166,15 @@ export default class BookingController {
       if (!bookingData) {
         Logger.warn(`Failed send Notification, Booking not found, Booking ID: ${saveProcess.id}.`)
       } else {
-        // Run Job
+        const jobId = uuid()
+        /*
+         * Run Job
+         * attempt 3 times on failed, every 2 minutes
+         */
         Bull.add(
           new BookingPurchasedJob().key,
           { booking: bookingData, locale: i18n.locale },
-          { attempts: 2, delay: 5000 }
+          { jobId, attempts: 3, backoff: { type: 'fixed', delay: 120000 } }
         )
 
         const reminder_booking_time = booking_time.setZone(localTimezone)
@@ -177,11 +183,32 @@ export default class BookingController {
           .diffNow('minutes')
 
         if (diffMinutes.minutes > 0) {
-          // Run Schedule reminder 20 minutes before Booking Time
+          const bookingReminderJob = new BookingReminderJob()
+          const jobId = uuid()
+          EventStatus.updateOrCreate(
+            {
+              event_id: jobId,
+            },
+            {
+              feature: bookingReminderJob.feature,
+              data_id: bookingData.id,
+              event_id: jobId,
+              event_provider: bookingReminderJob.key,
+              status: 'pending',
+              description: 'Pending',
+              response: '',
+            }
+          )
+
+          /*
+           * Run Schedule reminder 20 minutes before Booking Time
+           * attempt 3 times on failed, every 2 minutes
+           */
           Bull.schedule(
-            new BookingReminderJob().key,
-            { booking: bookingData, locale: i18n.locale },
-            reminder_booking_time.minus({ minutes: 20 }).toJSDate()
+            bookingReminderJob.key,
+            { booking: bookingData, locale: i18n.locale, jobId },
+            reminder_booking_time.minus({ minutes: 20 }).toJSDate(),
+            { jobId: jobId, attempts: 3, backoff: { type: 'fixed', delay: 120000 } }
           )
         }
       }

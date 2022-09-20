@@ -1,8 +1,7 @@
-import { JobContract } from '@ioc:Rocketseat/Bull'
+import { Job, JobContract } from '@ioc:Rocketseat/Bull'
 import Booking from 'App/Models/Service/Booking'
 import Logger from '@ioc:Adonis/Core/Logger'
 import EventStatus from 'App/Models/EventStatus'
-import { v4 as uuid } from 'uuid'
 import { formattedDate } from '../../utils/date'
 import { DateTime } from 'luxon'
 import BookingReminderMailer from 'App/Mailers/BookingReminderMailer'
@@ -15,7 +14,7 @@ import { appUrl } from 'Config/app'
 |
 */
 
-interface JobBookingReminderProps {
+export interface JobBookingReminderProps extends Job {
   data: {
     booking: Booking
     locale: string
@@ -24,21 +23,25 @@ interface JobBookingReminderProps {
 
 export default class BookingReminder implements JobContract {
   public key = 'BookingReminderJob'
+  public feature: string = 'booking_reminder'
+
   private event_id: string
-  private feature: string = 'booking_reminder'
   private data_id: number
 
   public async handle(job: JobBookingReminderProps) {
     const { data } = job
     const { booking, locale } = data
 
+    this.data_id = booking.id
+    this.event_id = String(job.id)
+
     if (!booking.user) {
-      Logger.warn(`User not found on BookingPurchasedJob, Booking ID: ${booking.id}.`)
+      Logger.warn(`User not found on BookingReminderJob, Booking ID: ${booking.id}.`)
       return
     }
 
     if (!booking.user) {
-      Logger.warn(`User not found on BookingPurchasedJob, Booking ID: ${booking.id}.`)
+      Logger.warn(`User not found on BookingReminderJob, Booking ID: ${booking.id}.`)
       return
     }
 
@@ -60,17 +63,20 @@ export default class BookingReminder implements JobContract {
 
     const bookingPage: string = appUrl + '/page/service/booking/' + booking.id
 
-    this.data_id = booking.id
-    this.event_id = uuid()
-
-    EventStatus.create({
-      feature: this.feature,
-      data_id: this.data_id,
-      event_id: this.event_id,
-      event_provider: 'mail',
-      status: 'sending',
-      description: 'Sending',
-    })
+    EventStatus.updateOrCreate(
+      {
+        event_id: this.event_id,
+      },
+      {
+        feature: this.feature,
+        data_id: this.data_id,
+        event_id: this.event_id,
+        event_provider: this.key,
+        status: 'sending',
+        description: 'Sending',
+        response: '',
+      }
+    )
 
     await new BookingReminderMailer(booking, {
       locale: locale,
@@ -78,22 +84,27 @@ export default class BookingReminder implements JobContract {
       formatted_booking_time: formatted_booking_time,
       feature: this.feature,
       data_id: this.data_id,
-      event_id: this.event_id,
+      event: {
+        provider: this.key,
+        id: this.event_id,
+      },
     }).send()
   }
 
   public async onFailed(_job: any, _error: any) {
-    EventStatus.create({
-      feature: this.feature,
-      data_id: this.data_id,
-      event_id: this.event_id,
-      event_provider: 'mail',
-      status: 'error',
-      description: _error?.message,
-    })
-  }
-
-  public async onCompleted(_job) {
-    console.log('onCompleted', this.key, _job.data?.booking?.id ?? _job.data)
+    EventStatus.updateOrCreate(
+      {
+        event_id: this.event_id,
+      },
+      {
+        event_id: this.event_id,
+        event_provider: this.key,
+        feature: this.feature,
+        data_id: this.data_id,
+        status: 'error',
+        description: 'Failed Send Mail',
+        response: _error?.message,
+      }
+    )
   }
 }
