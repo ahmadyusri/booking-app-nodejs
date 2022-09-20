@@ -1,6 +1,7 @@
 import I18n, { I18nContract } from '@ioc:Adonis/Addons/I18n'
 import { BaseMailer, MessageContract } from '@ioc:Adonis/Addons/Mail'
 import User from 'App/Models/User'
+import { appName } from 'Config/app'
 
 export default class NewUserMailer extends BaseMailer {
   protected i18n: I18nContract
@@ -30,7 +31,7 @@ export default class NewUserMailer extends BaseMailer {
   public prepare(message: MessageContract) {
     message
       .subject(this.i18n.formatMessage('auth.email.welcome_subject'))
-      .from('info@booking-app.com')
+      .from('info@booking-app.com', appName)
       .to(this.user.email)
       .messageId(this.additionalData.event_id)
       .htmlView('emails/welcome', {

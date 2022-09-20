@@ -1,6 +1,7 @@
 import { BaseMailer, MessageContract } from '@ioc:Adonis/Addons/Mail'
 import I18n, { I18nContract } from '@ioc:Adonis/Addons/I18n'
 import Booking from 'App/Models/Service/Booking'
+import { appName } from 'Config/app'
 
 export default class BookingPurchasedMailer extends BaseMailer {
   protected i18n: I18nContract
@@ -30,7 +31,7 @@ export default class BookingPurchasedMailer extends BaseMailer {
   public prepare(message: MessageContract) {
     message
       .subject(this.i18n.formatMessage('booking.email.purchased.mail_subject'))
-      .from('info@booking-app.com')
+      .from('info@booking-app.com', appName)
       .to(this.booking.user.email)
       .messageId(this.additionalData.event_id)
       .htmlView('emails/booking/purchased', {
