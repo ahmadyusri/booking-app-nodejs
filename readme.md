@@ -80,12 +80,19 @@ docker-compose up -d --build
 node ace test
 ```
 
+## Live Demo
+
+- Open [Live Demo](https://booking-app.yukkoding.com) to view it in the browser.
+- Postman Collection [Restful API](https://www.postman.com/collections/daba950679063b2f9e2e) click to view it in the browser.
+
+
+
 ## Next Tasks
 
 - ✅ Simple Auth
 - ✅ Simple Booking Process
 - ✅ Simple Article Feature
-- ✅ Send Reminder 20 Minutes before Booking Time
+- ✅ Send Reminder 20 Minutes before Booking Time when Booking Time After 30 Minutes from Now
 - ⬜️ Unit Test
 - ⬜️ Separation of message broker to another service
 - ⬜️ User Permission Admin and Customer
