@@ -22,7 +22,8 @@
       "@adonisjs/mail",
       "@adonisjs/view",
       "@adonisjs/i18n",
-      "@rocketseat/adonis-bull"
+      "@rocketseat/adonis-bull",
+      "@adonisjs/redis"
     ]
   }
 }

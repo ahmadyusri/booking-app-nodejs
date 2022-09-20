@@ -20,7 +20,8 @@
     "./start/kernel",
     "./start/events",
     "./start/i18n",
-    "./start/mail"
+    "./start/mail",
+    "./start/redis"
   ],
   "providers": [
     "./providers/AppProvider",
@@ -31,7 +32,8 @@
     "@adonisjs/mail",
     "@adonisjs/view",
     "@adonisjs/i18n",
-    "@rocketseat/adonis-bull"
+    "@rocketseat/adonis-bull",
+    "@adonisjs/redis"
   ],
   "aceProviders": ["@adonisjs/repl"],
   "tests": {
