@@ -6,6 +6,7 @@
     "dev": "node ace serve --watch",
     "build": "node ace build --production",
     "start": "node server.js",
+    "queue:work": "node ace bull:listen",
     "lint": "eslint . --ext=.ts",
     "format": "prettier --write ."
   },
@@ -59,6 +60,7 @@
     "@adonisjs/i18n": "^1.5.6",
     "@adonisjs/lucid": "^18.1.1",
     "@adonisjs/mail": "^8.1.2",
+    "@adonisjs/redis": "^7.3.1",
     "@adonisjs/repl": "^3.1.11",
     "@adonisjs/view": "^6.2.0",
     "@rocketseat/adonis-bull": "^1.0.4",
