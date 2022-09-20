@@ -14,12 +14,7 @@ export default class extends BaseSchema {
       table.string('status').notNullable()
       table.text('description').nullable()
       table.text('response').nullable()
-
-      /**
-       * Uses timestamptz for PostgreSQL and DATETIME2 for MSSQL
-       */
-      table.timestamp('created_at', { useTz: true })
-      table.timestamp('updated_at', { useTz: true })
+      table.timestamps()
     })
   }
 
