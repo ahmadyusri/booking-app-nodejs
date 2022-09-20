@@ -11,7 +11,7 @@ printf "[RUN docker-entrypoint-app.sh] Start PM2 command\n\n"
 # Run Migration
 if [[ "${RUN_MIGRATION}" == "1" ]]; then
 	printf '[RUN docker-entrypoint-app.sh] Run Migration\n'
-	node ace migration:run
+	node ace migration:run --force
 fi
 
 pm2 start "node ace bull:listen" --name="service-queue-booking-app"
