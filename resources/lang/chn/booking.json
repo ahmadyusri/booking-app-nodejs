@@ -1,0 +1,26 @@
+{
+  "email": {
+    "purchased": {
+      "mail_subject": "感谢预订",
+      "greeting": "你好 { name }",
+      "title": "感谢预订 { name }",
+      "description": {
+        "time": "预订时间: { booking_time }"
+      },
+      "link": {
+        "booking_page": "<a href=\"{ url }\">预订页面</a>"
+      }
+    },
+    "reminder": {
+      "mail_subject": "预订提醒",
+      "greeting": "你好 { name }",
+      "title": "这是对 { name } 的提醒",
+      "description": {
+        "time": "预订时间: { booking_time }"
+      },
+      "link": {
+        "booking_page": "<a href=\"{ url }\">预订页面</a>"
+      }
+    }
+  }
+}

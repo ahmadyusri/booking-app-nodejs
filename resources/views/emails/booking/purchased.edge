@@ -1,0 +1,11 @@
+<h1> {{ t('booking.email.purchased.greeting', {name: booking.user?.name}) }} </h1>
+<p>
+	{{ t('booking.email.purchased.title', {name: booking.service?.title}) }}
+	<br />
+	{{
+	t('booking.email.purchased.description.time', { booking_time: formatted_booking_time ?? booking.booking_time })
+	}}
+</p>
+<p>
+	{{{ t('booking.email.purchased.link.booking_page', {url: url}) }}}
+</p>

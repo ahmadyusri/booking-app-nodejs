@@ -1,0 +1,13 @@
+{
+  "shared": {
+    "exists": "The selected {field} is invalid.",
+    "number": "The {field} field validation failed {rule}.",
+    "range": "The {field} field must be between {start} and {stop}.",
+    "unsigned": "The {field} field must be a positive number.",
+    "required": "The {field} field is required.",
+    "unique": "The {field} has already been taken.",
+    "email": "The {field} must be a valid email address.",
+    "maxLength": "The {field} may not be greater than {maxLength} characters.",
+    "minLength": "The {field} must be at least {minLength} characters."
+  }
+}

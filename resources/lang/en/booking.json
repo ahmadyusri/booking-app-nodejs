@@ -1,0 +1,26 @@
+{
+  "email": {
+    "purchased": {
+      "mail_subject": "Thanks for Booking",
+      "greeting": "Hi { name }",
+      "title": "Thanks for booking of { name }",
+      "description": {
+        "time": "Booking Time: { booking_time }"
+      },
+      "link": {
+        "booking_page": "<a href=\"{ url }\">Booking Page</a>"
+      }
+    },
+    "reminder": {
+      "mail_subject": "Booking Reminder",
+      "greeting": "Hi { name }",
+      "title": "This is Reminder of { name }",
+      "description": {
+        "time": "Booking Time: { booking_time }"
+      },
+      "link": {
+        "booking_page": "<a href=\"{ url }\">Booking Page</a>"
+      }
+    }
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "shared": {
+    "exists": "选择的 {field} 无效.",
+    "number": "{field} 字段验证失败 {rule}.",
+    "range": "{field} 字段必须在 {start} 和 {stop} 之间.",
+    "unsigned": "{field} 字段必须是正数.",
+    "required": "{field} 字段是必需的.",
+    "unique": "{field} 已被占用.",
+    "email": "{field} 必须是有效的电子邮件地址.",
+    "maxLength": "{field} 不能大于 {maxLength} 个字符.",
+    "minLength": "{field} 必须至少为 {minLength} 个字符."
+  }
+}

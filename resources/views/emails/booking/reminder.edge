@@ -1,0 +1,11 @@
+<h1> {{ t('booking.email.reminder.greeting', {name: booking.user?.name}) }} </h1>
+<p>
+	{{ t('booking.email.reminder.title', {name: booking.service?.title}) }}
+	<br />
+	{{
+	t('booking.email.reminder.description.time', {booking_time: formatted_booking_time ?? booking.booking_time})
+	}}
+</p>
+<p>
+	{{{ t('booking.email.reminder.link.booking_page', {url: url}) }}}
+</p>
