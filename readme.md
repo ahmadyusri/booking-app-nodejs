@@ -66,12 +66,49 @@ node ace bull:listen
 
 ## Docker Deployment
 
+Optional Build and Run Additional Image Redis and Mysql
+
+```bash
+make docker_build_additional_image
+# or
+docker-compose -f docker-compose-additional.yml --env-file .env.production up -d
+```
+
+Prepare environment test and production
+
+```bash
+# Copy default env
+cp .env.example .env.production
+
+# Update .env.production
+nano .env.production
+
+# Update .env.test
+nano .env.test
+
+# Update redis, mysql config to success running test
+```
+
 Build and Run Image
 
 ```bash
 make run
 # or
-docker-compose up -d --build
+docker-compose --env-file .env.production up -d
+```
+
+Update docker-compose.yml if redis and mysql host to container when running test
+
+```bash
+# Add services.app.build to
+network: booking_app_network
+
+# If error `Error response from daemon: network mode "booking_app_network" not supported by buildkit`
+# set DOCKER_BUILDKIT to false
+
+DOCKER_BUILDKIT=0 make run
+# or
+DOCKER_BUILDKIT=0 docker-compose --env-file .env.production up -d
 ```
 
 ## Testing
@@ -84,8 +121,6 @@ node ace test
 
 - Open [Live Demo](https://booking-app.yukkoding.com) to view it in the browser.
 - Postman Collection [Restful API](https://www.postman.com/collections/daba950679063b2f9e2e) click to view it in the browser.
-
-
 
 ## Next Tasks
 

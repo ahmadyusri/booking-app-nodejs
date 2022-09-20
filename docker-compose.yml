@@ -14,28 +14,10 @@ services:
       NODE_ENV: production
     ports:
       - '3333:${PORT}'
-    depends_on:
-      - redis
-      - mysql
-    networks:
-      - booking_app_network
-
-  redis:
-    image: redis:alpine
-    restart: always
-    networks:
-      - booking_app_network
-
-  mysql:
-    image: mysql:5.7
-    environment:
-      MYSQL_ROOT_PASSWORD: a#2b06YyThUU
-    entrypoint: sh -c "
-      echo 'CREATE DATABASE IF NOT EXISTS booking_app; CREATE DATABASE IF NOT EXISTS booking_app_test;' > /docker-entrypoint-initdb.d/init.sql;
-      /usr/local/bin/docker-entrypoint.sh --sql_mode='' --character-set-server=utf8mb4 --collation-server=utf8mb4_general_ci;"
     networks:
       - booking_app_network
 
 networks:
   booking_app_network:
+    name: booking_app_network
     driver: bridge
