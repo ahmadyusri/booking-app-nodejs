@@ -1,7 +1,9 @@
 import { DateTime } from 'luxon'
-import { BaseModel, belongsTo, BelongsTo, column } from '@ioc:Adonis/Lucid/Orm'
+import { afterDelete, BaseModel, belongsTo, BelongsTo, column } from '@ioc:Adonis/Lucid/Orm'
 import User from '../User'
 import Service from './Service'
+import Bull from '@ioc:Rocketseat/Bull'
+import EventStatus from '../EventStatus'
 
 export default class Booking extends BaseModel {
   static get table() {
@@ -30,6 +32,24 @@ export default class Booking extends BaseModel {
 
   @column()
   public timezone: string
+
+  @afterDelete()
+  public static async deleteJobs(booking: Booking) {
+    // Get Event Status
+    const eventStatus = await EventStatus.query().where('data_id', booking.id)
+    eventStatus.forEach((item_status) => {
+      const event_id = item_status.event_id
+      const event_provider = item_status.event_provider
+
+      if (event_id && event_provider) {
+        // remove jobs
+        Bull.remove(event_provider, event_id)
+      }
+
+      // Delete event status
+      item_status.delete()
+    })
+  }
 
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime

@@ -93,6 +93,7 @@ node ace test
 - ✅ Simple Booking Process
 - ✅ Simple Article Feature
 - ✅ Send Reminder 20 Minutes before Booking Time when Booking Time After 30 Minutes from Now
+- ✅ Delete Reminder on Booking delete/cancel
 - ⬜️ Unit Test
 - ⬜️ Separation of message broker to another service
 - ⬜️ User Permission Admin and Customer
