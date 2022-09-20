@@ -9,6 +9,7 @@
 import Route from '@ioc:Adonis/Core/Route'
 
 Route.get('/', 'IndexController.index')
+Route.get('health', 'IndexController.health')
 
 Route.post('/login', 'Auth/AuthController.login').as('login')
 Route.post('/register', 'Auth/AuthController.register').as('register')
