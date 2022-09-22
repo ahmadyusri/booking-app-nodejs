@@ -24,10 +24,14 @@ export const addUser = async ({
   locale,
 }: AddUserProps): Promise<AddUserReturn> => {
   const i18n = I18n.locale(locale ?? I18n.defaultLocale)
-
   const trx = await Database.transaction()
 
   try {
+    const emailCheck = await User.query().where('email', email).first()
+    if (emailCheck) {
+      throw new Error(i18n.formatMessage('auth.E_EMAIL_EXISTS'))
+    }
+
     const user = await User.create(
       {
         name: name,
@@ -38,19 +42,15 @@ export const addUser = async ({
     )
 
     if (!user) {
-      return {
-        result: 'error',
-        status_code: 200,
-        title: i18n.formatMessage('auth.E_FAILED_SAVED'),
-      }
+      throw new Error(i18n.formatMessage('auth.E_FAILED_SAVED'))
     }
 
-    trx.commit()
+    await trx.commit()
 
     return {
       result: 'success',
       title: i18n.formatMessage('auth.REGISTER_SUCCESS'),
-      status_code: 200,
+      status_code: 201,
       data: user,
     }
   } catch (error) {
@@ -92,11 +92,7 @@ export const loginUser = async ({ password, email, locale }: LoginProps): Promis
     // Lookup user
     const user = await User.query().where('email', email).first()
     if (!user) {
-      return {
-        result: 'error',
-        status_code: 200,
-        title: i18n.formatMessage('auth.E_INVALID_ACCOUNT_NOT_FOUND'),
-      }
+      throw new Error(i18n.formatMessage('auth.E_INVALID_ACCOUNT_NOT_FOUND'))
     }
 
     // Verify password
