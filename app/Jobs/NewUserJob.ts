@@ -1,4 +1,4 @@
-import { Job, JobContract } from '@ioc:Rocketseat/Bull'
+import { Job, JobContract, QueueOptions, WorkerOptions } from '@ioc:Rocketseat/Bull'
 import User from 'App/Models/User'
 import NewUserMailer from 'App/Mailers/NewUserMailer'
 import EventStatus from 'App/Models/EventStatus'
@@ -18,12 +18,23 @@ export interface NewUserJobProps extends Job {
   }
 }
 
+import Env from '@ioc:Adonis/Core/Env'
+const prefix = Env.get('BULL_PREFIX')
+
 export default class NewUserJob implements JobContract {
   public key = 'NewUserJob'
   public feature: string = 'new_user'
 
   private event_id: string
   private data_id: number
+
+  public queueOptions: QueueOptions = {
+    prefix,
+  }
+
+  public workerOptions: WorkerOptions = {
+    prefix,
+  }
 
   public async handle(job: NewUserJobProps) {
     const { data } = job
