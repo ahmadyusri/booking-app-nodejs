@@ -3,11 +3,11 @@ import Redis from '@ioc:Adonis/Addons/Redis'
 
 Mail.monitorQueue(async (error): Promise<void> => {
   if (error) {
-    const views_data = error.mail.views.html?.data
-    const event_id = views_data?.event?.id
-    const event_provider = views_data?.event?.provider
+    const viewsData = error.mail.views.html?.data
+    const eventId = viewsData?.event?.id
+    const eventProvider = viewsData?.event?.provider
 
-    if (!event_id) {
+    if (!eventId) {
       return
     }
 
@@ -16,15 +16,15 @@ Mail.monitorQueue(async (error): Promise<void> => {
       response: error.message,
     }
 
-    if (event_provider) {
-      data['event_provider'] = event_provider
+    if (eventProvider) {
+      data['event_provider'] = eventProvider
     }
 
     // Start Listener Job Response
     await Redis.publish(
       'jobs-response',
       JSON.stringify({
-        jobId: event_id,
+        jobId: eventId,
         status: 'error',
         data: data,
       })
