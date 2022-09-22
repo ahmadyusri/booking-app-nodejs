@@ -3,11 +3,9 @@ import CreateUserValidator from 'App/Validators/Auth/CreateUserValidator'
 import LoginUserValidator from 'App/Validators/Auth/LoginUserValidator'
 import {
   addUser,
-  AddUserReturn,
   createAPIToken,
-  emitEventNewUser,
+  eventNewUser,
   loginUser,
-  LoginUserReturn,
   logoutUser,
 } from 'App/Services/AuthService'
 
@@ -20,7 +18,7 @@ export default class AuthController {
 
     const { email, password } = request.body()
 
-    const loginUserService: LoginUserReturn = await loginUser({
+    const loginUserService = await loginUser({
       email,
       password,
       locale: i18n.locale,
@@ -50,7 +48,7 @@ export default class AuthController {
     return response.status(status_code).send({
       result: loginUserService.result,
       title: loginUserService.title,
-      data: token,
+      data: token.toJSON(),
     })
   }
 
@@ -62,7 +60,7 @@ export default class AuthController {
 
     const { name, email, password } = request.body()
 
-    const addUserService: AddUserReturn = await addUser({
+    const addUserService = await addUser({
       name,
       email,
       password,
@@ -91,12 +89,12 @@ export default class AuthController {
     const token = await createAPIToken({ user, auth })
 
     // Emit Event
-    emitEventNewUser({ user, locale: i18n.locale })
+    eventNewUser({ user, locale: i18n.locale })
 
     return response.status(status_code).send({
       result: addUserService.result,
       title: addUserService.title,
-      data: token,
+      data: token.toJSON(),
     })
   }
 

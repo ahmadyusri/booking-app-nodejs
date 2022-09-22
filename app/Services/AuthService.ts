@@ -4,23 +4,18 @@ import I18n from '@ioc:Adonis/Addons/I18n'
 import Bull from '@ioc:Rocketseat/Bull'
 import NewUserJob from 'App/Jobs/NewUserJob'
 import Hash from '@ioc:Adonis/Core/Hash'
-import { AuthContract } from '@ioc:Adonis/Addons/Auth'
 import { DateTime } from 'luxon'
 import { v4 as uuid } from 'uuid'
-
-export interface AddUserProps {
-  name: string
-  email: string
-  password: string
-  locale?: string
-}
-
-export interface AddUserReturn {
-  result: string
-  title: string
-  status_code: number
-  data?: any
-}
+import {
+  AddUserProps,
+  AddUserReturn,
+  CreateAPITokenProps,
+  EventNewUserProps,
+  LoginProps,
+  LoginReturn,
+  LogoutProps,
+} from 'App/Interfaces/AuthInterfaces'
+import { OpaqueTokenContract } from '@ioc:Adonis/Addons/Auth'
 
 export const addUser = async ({
   name,
@@ -69,22 +64,15 @@ export const addUser = async ({
   }
 }
 
-export interface CreateAPITokenProps {
-  auth: AuthContract
-  user: User
-}
-
-export const createAPIToken = async ({ auth, user }: CreateAPITokenProps): Promise<object> => {
+export const createAPIToken = async ({
+  auth,
+  user,
+}: CreateAPITokenProps): Promise<OpaqueTokenContract<User>> => {
   // Generate token
-  return (await auth.use('api').generate(user)).toJSON()
+  return await auth.use('api').generate(user)
 }
 
-export interface EmitEventNewUserProps {
-  user: User
-  locale?: string
-}
-
-export const emitEventNewUser = ({ user, locale }: EmitEventNewUserProps): void => {
+export const eventNewUser = ({ user, locale }: EventNewUserProps): void => {
   /*
    * Run Job
    * attempt 2 times on failed, every 1 minutes
@@ -97,24 +85,7 @@ export const emitEventNewUser = ({ user, locale }: EmitEventNewUserProps): void 
   )
 }
 
-export interface LoginUserProps {
-  email: string
-  password: string
-  locale?: string
-}
-
-export interface LoginUserReturn {
-  result: string
-  title: string
-  status_code: number
-  data?: any
-}
-
-export const loginUser = async ({
-  password,
-  email,
-  locale,
-}: LoginUserProps): Promise<LoginUserReturn> => {
+export const loginUser = async ({ password, email, locale }: LoginProps): Promise<LoginReturn> => {
   const i18n = I18n.locale(locale ?? I18n.defaultLocale)
 
   try {
@@ -163,11 +134,7 @@ export const loginUser = async ({
   }
 }
 
-export interface LogoutUserProps {
-  auth: AuthContract
-}
-
-export const logoutUser = async ({ auth }: LogoutUserProps): Promise<void> => {
+export const logoutUser = async ({ auth }: LogoutProps): Promise<void> => {
   // Logout
   await auth.use('api').revoke()
 }
