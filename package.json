@@ -8,7 +8,8 @@
     "start": "node server.js",
     "queue:work": "node ace bull:listen",
     "lint": "eslint . --ext=.ts",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "test": "node ace test"
   },
   "eslintConfig": {
     "extends": [
