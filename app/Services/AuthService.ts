@@ -1,7 +1,7 @@
 import Database from '@ioc:Adonis/Lucid/Database'
 import User from 'App/Models/User'
 import I18n from '@ioc:Adonis/Addons/I18n'
-import Bull from '@ioc:Rocketseat/Bull'
+import Bull, { Job } from '@ioc:Rocketseat/Bull'
 import NewUserJob from 'App/Jobs/NewUserJob'
 import Hash from '@ioc:Adonis/Core/Hash'
 import { DateTime } from 'luxon'
@@ -72,13 +72,14 @@ export const createAPIToken = async ({
   return await auth.use('api').generate(user)
 }
 
-export const eventNewUser = ({ user, locale }: EventNewUserProps): void => {
+export const eventNewUser = async ({ user, locale }: EventNewUserProps): Promise<Job> => {
   /*
    * Run Job
    * attempt 2 times on failed, every 1 minutes
    */
   const jobId = uuid()
-  Bull.add(
+
+  return await Bull.add(
     new NewUserJob().key,
     { user, locale },
     { jobId, attempts: 2, backoff: { type: 'fixed', delay: 60000 } }
