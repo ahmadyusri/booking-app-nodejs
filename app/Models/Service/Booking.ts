@@ -6,7 +6,7 @@ import Bull from '@ioc:Rocketseat/Bull'
 import EventStatus from '../EventStatus'
 
 export default class Booking extends BaseModel {
-  static get table() {
+  public static get table() {
     return 'service_bookings'
   }
 
@@ -38,12 +38,12 @@ export default class Booking extends BaseModel {
     // Get Event Status
     const eventStatus = await EventStatus.query().where('data_id', booking.id)
     eventStatus.forEach((item_status) => {
-      const event_id = item_status.event_id
-      const event_provider = item_status.event_provider
+      const eventId = item_status.event_id
+      const eventProvider = item_status.event_provider
 
-      if (event_id && event_provider) {
+      if (eventId && eventProvider) {
         // remove jobs
-        Bull.remove(event_provider, event_id)
+        Bull.remove(eventProvider, eventId)
       }
 
       // Delete event status

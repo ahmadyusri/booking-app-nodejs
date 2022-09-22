@@ -3,7 +3,7 @@ import { ModelPaginatorContract } from '@ioc:Adonis/Lucid/Orm'
 import Service from 'App/Models/Service/Service'
 
 export default class ServiceController {
-  index = async ({ auth, request, response }: HttpContextContract) => {
+  public index = async ({ auth, request, response }: HttpContextContract) => {
     const page = request.input('page', 1)
     const limit = 10
 
@@ -26,7 +26,7 @@ export default class ServiceController {
     })
   }
 
-  show = async ({ params, response }: HttpContextContract) => {
+  public show = async ({ params, response }: HttpContextContract) => {
     const { id } = params
     if (!id) {
       return response.status(422).send({

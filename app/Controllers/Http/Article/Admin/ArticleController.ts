@@ -9,7 +9,7 @@ import ArticlePublicUpdateValidator from 'App/Validators/Article/Admin/ArticlePu
 import ArticleTrendingUpdateValidator from 'App/Validators/Article/Admin/ArticleTrendingUpdateValidator'
 
 export default class ArticleController {
-  index = async ({ request, response }: HttpContextContract) => {
+  public index = async ({ request, response }: HttpContextContract) => {
     const page = request.input('page', 1)
     const limit = 10
 
@@ -53,7 +53,7 @@ export default class ArticleController {
     })
   }
 
-  show = async ({ response, params }: HttpContextContract) => {
+  public show = async ({ response, params }: HttpContextContract) => {
     const { id } = params
     if (!id) {
       return response.status(422).send({
@@ -77,7 +77,7 @@ export default class ArticleController {
     })
   }
 
-  store = async ({ auth, request, response }: HttpContextContract) => {
+  public store = async ({ auth, request, response }: HttpContextContract) => {
     /**
      * Validate request body against the schema
      */
@@ -110,7 +110,7 @@ export default class ArticleController {
     })
   }
 
-  update = async ({ request, response, params }: HttpContextContract) => {
+  public update = async ({ request, response, params }: HttpContextContract) => {
     const { id } = params
     if (!id) {
       return response.status(422).send({
@@ -164,7 +164,7 @@ export default class ArticleController {
     })
   }
 
-  destroy = async ({ response, params }: HttpContextContract) => {
+  public destroy = async ({ response, params }: HttpContextContract) => {
     const { id } = params
     if (!id) {
       return response.status(422).send({
@@ -203,7 +203,7 @@ export default class ArticleController {
     })
   }
 
-  updateConfirm = async ({ request, response, params }: HttpContextContract) => {
+  public updateConfirm = async ({ request, response, params }: HttpContextContract) => {
     const { id } = params
     if (!id) {
       return response.status(422).send({
@@ -258,7 +258,7 @@ export default class ArticleController {
     })
   }
 
-  updatePublic = async ({ request, response, params }: HttpContextContract) => {
+  public updatePublic = async ({ request, response, params }: HttpContextContract) => {
     const { id } = params
     if (!id) {
       return response.status(422).send({
@@ -313,7 +313,7 @@ export default class ArticleController {
     })
   }
 
-  updateTrending = async ({ request, response, params }: HttpContextContract) => {
+  public updateTrending = async ({ request, response, params }: HttpContextContract) => {
     const { id } = params
     if (!id) {
       return response.status(422).send({
@@ -368,7 +368,7 @@ export default class ArticleController {
     })
   }
 
-  restore = async ({ response, params }: HttpContextContract) => {
+  public restore = async ({ response, params }: HttpContextContract) => {
     const { id } = params
     if (!id) {
       return response.status(422).send({
@@ -407,7 +407,7 @@ export default class ArticleController {
     })
   }
 
-  permanentDelete = async ({ response, params }: HttpContextContract) => {
+  public permanentDelete = async ({ response, params }: HttpContextContract) => {
     const { id } = params
     if (!id) {
       return response.status(422).send({

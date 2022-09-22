@@ -4,7 +4,7 @@ import { ModelPaginatorContract } from '@ioc:Adonis/Lucid/Orm'
 import Article from 'App/Models/Article/Article'
 
 export default class ArticleController {
-  index = async ({ request, response }: HttpContextContract) => {
+  public index = async ({ request, response }: HttpContextContract) => {
     const page = request.input('page', 1)
     const limit = 10
 
@@ -22,7 +22,7 @@ export default class ArticleController {
     })
   }
 
-  show = async ({ params, response }: HttpContextContract) => {
+  public show = async ({ params, response }: HttpContextContract) => {
     const { id } = params
     if (!id) {
       return response.status(422).send({

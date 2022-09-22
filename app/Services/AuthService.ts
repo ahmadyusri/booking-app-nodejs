@@ -105,7 +105,7 @@ export const loginUser = async ({ password, email, locale }: LoginProps): Promis
     }
 
     // Get Active API Token
-    const api_tokens = await user
+    const apiTokens = await user
       .related('api_tokens')
       .query()
       .where((query) => {
@@ -114,9 +114,9 @@ export const loginUser = async ({ password, email, locale }: LoginProps): Promis
       })
       .orderBy('created_at', 'asc')
 
-    if (api_tokens.length >= 3) {
+    if (apiTokens.length >= 3) {
       // Delete first API Token
-      api_tokens[0].delete()
+      apiTokens[0].delete()
     }
 
     return {

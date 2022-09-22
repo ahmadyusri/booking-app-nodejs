@@ -1,7 +1,7 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 
 export default class UserController {
-  profile = async ({ auth, response }: HttpContextContract) => {
+  public profile = async ({ auth, response }: HttpContextContract) => {
     const userData = auth.user
 
     if (!userData) {

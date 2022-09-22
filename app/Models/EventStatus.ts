@@ -2,7 +2,7 @@ import { DateTime } from 'luxon'
 import { BaseModel, column } from '@ioc:Adonis/Lucid/Orm'
 
 export default class EventStatus extends BaseModel {
-  static get table() {
+  public static get table() {
     return 'event_statuses'
   }
 

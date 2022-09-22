@@ -4,7 +4,7 @@ import Article from './Article'
 import User from '../User'
 
 export default class ArticleCategory extends BaseModel {
-  static get table() {
+  public static get table() {
     return 'article_categories'
   }
 

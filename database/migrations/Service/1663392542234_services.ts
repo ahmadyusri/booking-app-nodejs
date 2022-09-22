@@ -19,7 +19,7 @@ export default class extends BaseSchema {
       table.boolean('public').notNullable().defaultTo(1)
       table.integer('created_by').unsigned().notNullable()
 
-	  table.timestamp('deleted_at', { useTz: true }).nullable()
+      table.timestamp('deleted_at', { useTz: true }).nullable()
       table.timestamps()
     })
   }

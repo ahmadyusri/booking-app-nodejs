@@ -56,19 +56,19 @@ export default class BookingReminder implements JobContract {
       return
     }
 
-    const formattedBookingTime = formattedDate({
+    const formattedDateBookingTime = formattedDate({
       formattedInfo: `Booking ID: ${booking.id}`,
       dateTime: booking.booking_time,
       timezone: booking.timezone,
       userTimezone: booking?.user?.timezone,
     })
 
-    let formatted_booking_time: string = ''
-    if (typeof formattedBookingTime === 'string') {
-      formatted_booking_time = formattedBookingTime
-    } else if (formattedBookingTime instanceof DateTime) {
-      formatted_booking_time = `${formattedBookingTime.toFormat('dd MMM yyyy HH:mm')}, ${
-        formattedBookingTime.zoneName
+    let formattedBookingTime: string = ''
+    if (typeof formattedDateBookingTime === 'string') {
+      formattedBookingTime = formattedDateBookingTime
+    } else if (formattedDateBookingTime instanceof DateTime) {
+      formattedBookingTime = `${formattedDateBookingTime.toFormat('dd MMM yyyy HH:mm')}, ${
+        formattedDateBookingTime.zoneName
       }`
     }
 
@@ -92,7 +92,7 @@ export default class BookingReminder implements JobContract {
     await new BookingReminderMailer(booking, {
       locale: locale,
       booking_pageurl: bookingPage,
-      formatted_booking_time: formatted_booking_time,
+      formatted_booking_time: formattedBookingTime,
       feature: this.feature,
       data_id: this.data_id,
       event: {

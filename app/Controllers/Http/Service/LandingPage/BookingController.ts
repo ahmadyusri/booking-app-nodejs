@@ -13,7 +13,7 @@ import EventStatus from 'App/Models/EventStatus'
 import { v4 as uuid } from 'uuid'
 
 export default class BookingController {
-  index = async ({ auth, request, response }: HttpContextContract) => {
+  public index = async ({ auth, request, response }: HttpContextContract) => {
     const page = request.input('page', 1)
     const limit = 10
 
@@ -38,7 +38,7 @@ export default class BookingController {
     })
   }
 
-  show = async ({ auth, params, response }: HttpContextContract) => {
+  public show = async ({ auth, params, response }: HttpContextContract) => {
     const { id } = params
     if (!id) {
       return response.status(422).send({
@@ -78,7 +78,7 @@ export default class BookingController {
     })
   }
 
-  order = async ({ i18n, auth, request, response }: HttpContextContract) => {
+  public order = async ({ i18n, auth, request, response }: HttpContextContract) => {
     if (!auth.user) {
       return response.status(401).send({
         result: 'error',
@@ -103,7 +103,7 @@ export default class BookingController {
     }
 
     // Update to Local Timezone
-    const booking_time_localTimezone = DateTime.fromFormat(
+    const bookingTimeLocalTimezone = DateTime.fromFormat(
       request.input('booking_time'),
       formatTime,
       {
@@ -113,7 +113,7 @@ export default class BookingController {
 
     request.updateBody({
       ...request.body(),
-      booking_time_validate: booking_time_localTimezone.toFormat(formatTime),
+      booking_time_validate: bookingTimeLocalTimezone.toFormat(formatTime),
     })
 
     /**
@@ -131,11 +131,11 @@ export default class BookingController {
     await request.validate({ schema: newRequestSchema })
 
     // Update to Local Timezone
-    const booking_time = DateTime.fromFormat(request.input('booking_time'), formatTime, {
+    const bookingTime = DateTime.fromFormat(request.input('booking_time'), formatTime, {
       zone: timezone,
     }).setZone(timezone)
 
-    if (!booking_time.isValid) {
+    if (!bookingTime.isValid) {
       return response.status(200).send({
         result: 'error',
         title: 'Invalid Set Timezone, Please Try Again',
@@ -145,8 +145,8 @@ export default class BookingController {
     const bookingParams = {
       ...request.only(['service_id']),
 
-      booking_time: booking_time,
-      timezone: booking_time.zoneName,
+      booking_time: bookingTime,
+      timezone: bookingTime.zoneName,
       user_id: userId,
     }
 
@@ -177,10 +177,8 @@ export default class BookingController {
           { jobId, attempts: 3, backoff: { type: 'fixed', delay: 120000 } }
         )
 
-        const reminder_booking_time = booking_time.setZone(localTimezone)
-        const diffMinutes: Duration = reminder_booking_time
-          .minus({ minutes: 30 })
-          .diffNow('minutes')
+        const reminderBookingTime = bookingTime.setZone(localTimezone)
+        const diffMinutes: Duration = reminderBookingTime.minus({ minutes: 30 }).diffNow('minutes')
 
         if (diffMinutes.minutes > 0) {
           const bookingReminderJob = new BookingReminderJob()
@@ -207,7 +205,7 @@ export default class BookingController {
           Bull.schedule(
             bookingReminderJob.key,
             { booking: bookingData, locale: i18n.locale, jobId },
-            reminder_booking_time.minus({ minutes: 20 }).toJSDate(),
+            reminderBookingTime.minus({ minutes: 20 }).toJSDate(),
             { jobId: jobId, attempts: 3, backoff: { type: 'fixed', delay: 120000 } }
           )
         }
@@ -227,7 +225,7 @@ export default class BookingController {
     }
   }
 
-  destroy = async ({ auth, response, params }: HttpContextContract) => {
+  public destroy = async ({ auth, response, params }: HttpContextContract) => {
     const { id } = params
     if (!id) {
       return response.status(422).send({

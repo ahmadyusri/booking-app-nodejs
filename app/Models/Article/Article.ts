@@ -6,7 +6,7 @@ import ArticleCategory from './ArticleCategory'
 import User from '../User'
 
 export default class Article extends compose(BaseModel, SoftDeletes) {
-  static get table() {
+  public static get table() {
     return 'articles'
   }
 

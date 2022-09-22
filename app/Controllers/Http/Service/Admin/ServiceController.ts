@@ -9,7 +9,7 @@ import ServicePublicUpdateValidator from 'App/Validators/Service/Admin/ServicePu
 import ServiceTrendingUpdateValidator from 'App/Validators/Service/Admin/ServiceTrendingUpdateValidator'
 
 export default class ServiceController {
-  index = async ({ request, response }: HttpContextContract) => {
+  public index = async ({ request, response }: HttpContextContract) => {
     const page = request.input('page', 1)
     const limit = 10
 
@@ -39,7 +39,7 @@ export default class ServiceController {
     })
   }
 
-  show = async ({ params, response }: HttpContextContract) => {
+  public show = async ({ params, response }: HttpContextContract) => {
     const { id } = params
     if (!id) {
       return response.status(422).send({
@@ -63,7 +63,7 @@ export default class ServiceController {
     })
   }
 
-  store = async ({ auth, request, response }: HttpContextContract) => {
+  public store = async ({ auth, request, response }: HttpContextContract) => {
     /**
      * Validate request body against the schema
      */
@@ -95,7 +95,7 @@ export default class ServiceController {
     })
   }
 
-  update = async ({ request, response, params }: HttpContextContract) => {
+  public update = async ({ request, response, params }: HttpContextContract) => {
     const { id } = params
     if (!id) {
       return response.status(422).send({
@@ -149,7 +149,7 @@ export default class ServiceController {
     })
   }
 
-  updatePublic = async ({ request, response, params }: HttpContextContract) => {
+  public updatePublic = async ({ request, response, params }: HttpContextContract) => {
     const { id } = params
     if (!id) {
       return response.status(422).send({
@@ -204,7 +204,7 @@ export default class ServiceController {
     })
   }
 
-  updateTrending = async ({ request, response, params }: HttpContextContract) => {
+  public updateTrending = async ({ request, response, params }: HttpContextContract) => {
     const { id } = params
     if (!id) {
       return response.status(422).send({
@@ -259,7 +259,7 @@ export default class ServiceController {
     })
   }
 
-  destroy = async ({ response, params }: HttpContextContract) => {
+  public destroy = async ({ response, params }: HttpContextContract) => {
     const { id } = params
     if (!id) {
       return response.status(422).send({
@@ -298,7 +298,7 @@ export default class ServiceController {
     })
   }
 
-  restore = async ({ response, params }: HttpContextContract) => {
+  public restore = async ({ response, params }: HttpContextContract) => {
     const { id } = params
     if (!id) {
       return response.status(422).send({
@@ -337,7 +337,7 @@ export default class ServiceController {
     })
   }
 
-  permanentDelete = async ({ response, params }: HttpContextContract) => {
+  public permanentDelete = async ({ response, params }: HttpContextContract) => {
     const { id } = params
     if (!id) {
       return response.status(422).send({

@@ -4,7 +4,7 @@ import { ModelPaginatorContract } from '@ioc:Adonis/Lucid/Orm'
 import Booking from 'App/Models/Service/Booking'
 
 export default class BookingController {
-  index = async ({ request, response }: HttpContextContract) => {
+  public index = async ({ request, response }: HttpContextContract) => {
     const page = request.input('page', 1)
     const limit = 10
 
@@ -20,7 +20,7 @@ export default class BookingController {
     })
   }
 
-  show = async ({ params, response }: HttpContextContract) => {
+  public show = async ({ params, response }: HttpContextContract) => {
     const { id } = params
     if (!id) {
       return response.status(422).send({
@@ -48,7 +48,7 @@ export default class BookingController {
     })
   }
 
-  destroy = async ({ response, params }: HttpContextContract) => {
+  public destroy = async ({ response, params }: HttpContextContract) => {
     const { id } = params
     if (!id) {
       return response.status(422).send({

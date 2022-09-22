@@ -43,7 +43,7 @@ export default class NewUserJob implements JobContract {
     this.data_id = user.id
     this.event_id = String(job.id)
 
-    let verification_pageurl: string = appUrl + '/user/verification'
+    let verificationPageurl: string = appUrl + '/user/verification'
 
     EventStatus.updateOrCreate(
       {
@@ -62,7 +62,7 @@ export default class NewUserJob implements JobContract {
 
     await new NewUserMailer(user, {
       locale: locale,
-      verification_pageurl: verification_pageurl,
+      verification_pageurl: verificationPageurl,
       feature: this.feature,
       data_id: this.data_id,
       event: {

@@ -6,7 +6,7 @@ import User from '../User'
 import Booking from './Booking'
 
 export default class Service extends compose(BaseModel, SoftDeletes) {
-  static get table() {
+  public static get table() {
     return 'service_services'
   }
 
