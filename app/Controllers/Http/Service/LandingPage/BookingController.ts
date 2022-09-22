@@ -111,6 +111,13 @@ export default class BookingController {
       }
     ).setZone(localTimezone)
 
+    if (!bookingTimeLocalTimezone.isValid) {
+      return response.status(200).send({
+        result: 'error',
+        title: 'Invalid Set Local Timezone, Please Try Again',
+      })
+    }
+
     request.updateBody({
       ...request.body(),
       booking_time_validate: bookingTimeLocalTimezone.toFormat(formatTime),
@@ -177,8 +184,9 @@ export default class BookingController {
           { jobId, attempts: 3, backoff: { type: 'fixed', delay: 120000 } }
         )
 
-        const reminderBookingTime = bookingTime.setZone(localTimezone)
-        const diffMinutes: Duration = reminderBookingTime.minus({ minutes: 30 }).diffNow('minutes')
+        const diffMinutes: Duration = bookingTimeLocalTimezone
+          .minus({ minutes: 30 })
+          .diffNow('minutes')
 
         if (diffMinutes.minutes > 0) {
           const bookingReminderJob = new BookingReminderJob()
@@ -205,7 +213,7 @@ export default class BookingController {
           Bull.schedule(
             bookingReminderJob.key,
             { booking: bookingData, locale: i18n.locale, jobId },
-            reminderBookingTime.minus({ minutes: 20 }).toJSDate(),
+            bookingTimeLocalTimezone.minus({ minutes: 20 }).toJSDate(),
             { jobId: jobId, attempts: 3, backoff: { type: 'fixed', delay: 120000 } }
           )
         }
