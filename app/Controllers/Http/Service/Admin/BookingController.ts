@@ -71,7 +71,7 @@ export default class BookingController {
       bookingData.useTransaction(trx)
       await bookingData.delete()
 
-      trx.commit()
+      await trx.commit()
     } catch (error) {
       await trx.rollback()
 

@@ -62,7 +62,7 @@ export default class ArticleController {
     try {
       await ArticleCategory.create(articleCategoryData, { client: trx })
 
-      trx.commit()
+      await trx.commit()
     } catch (error) {
       await trx.rollback()
 
@@ -109,7 +109,7 @@ export default class ArticleController {
       articleCategory.merge(articleCategoryParams)
       await articleCategory.save()
 
-      trx.commit()
+      await trx.commit()
     } catch (error) {
       await trx.rollback()
 
@@ -148,7 +148,7 @@ export default class ArticleController {
       articleCategory.useTransaction(trx)
       await articleCategory.delete()
 
-      trx.commit()
+      await trx.commit()
     } catch (error) {
       await trx.rollback()
 

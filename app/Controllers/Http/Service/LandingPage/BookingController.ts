@@ -162,7 +162,7 @@ export default class BookingController {
     try {
       const saveProcess = await Booking.create(bookingParams, { client: trx })
 
-      trx.commit()
+      await trx.commit()
 
       const bookingData = await Booking.query()
         .where('id', saveProcess.id)
@@ -272,7 +272,7 @@ export default class BookingController {
       bookingData.useTransaction(trx)
       await bookingData.delete()
 
-      trx.commit()
+      await trx.commit()
     } catch (error) {
       await trx.rollback()
 

@@ -79,7 +79,7 @@ export default class ServiceController {
     try {
       await Service.create(serviceData, { client: trx })
 
-      trx.commit()
+      await trx.commit()
     } catch (error) {
       await trx.rollback()
 
@@ -133,7 +133,7 @@ export default class ServiceController {
       serviceData.merge(serviceDataParams)
       await serviceData.save()
 
-      trx.commit()
+      await trx.commit()
     } catch (error) {
       await trx.rollback()
 
@@ -188,7 +188,7 @@ export default class ServiceController {
 
       await serviceData.save()
 
-      trx.commit()
+      await trx.commit()
     } catch (error) {
       await trx.rollback()
 
@@ -243,7 +243,7 @@ export default class ServiceController {
 
       await serviceData.save()
 
-      trx.commit()
+      await trx.commit()
     } catch (error) {
       await trx.rollback()
 
@@ -282,7 +282,7 @@ export default class ServiceController {
       serviceData.useTransaction(trx)
       await serviceData.delete()
 
-      trx.commit()
+      await trx.commit()
     } catch (error) {
       await trx.rollback()
 
@@ -321,7 +321,7 @@ export default class ServiceController {
       serviceData.useTransaction(trx)
       await serviceData.restore()
 
-      trx.commit()
+      await trx.commit()
     } catch (error) {
       await trx.rollback()
 
@@ -360,7 +360,7 @@ export default class ServiceController {
       serviceData.useTransaction(trx)
       await serviceData.forceDelete()
 
-      trx.commit()
+      await trx.commit()
     } catch (error) {
       await trx.rollback()
 
